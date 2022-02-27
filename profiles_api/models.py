@@ -19,17 +19,17 @@ class UserProfileManager(BaseUserManager):
     user = self.model(email=email, name=name)
 
     user.set_password(password)#encrypts the password
-    user.save(using=self.__db__) #Django supports multiple dbs
+    user.save(using=self._db) #Django supports multiple dbs
 
     return user
 
-  def create_super_user(self, email, name, password):
+  def create_superuser(self, email, name, password):
     """Create and save a new superuser with given details"""
     user = self.create_user(email, name, password)
 
     user.is_superuser = True # automatically created by the PermissionsMixin
     user.is_staff = True
-    user.save(using=self.__db__)
+    user.save(using=self._db)
 
     return user
 
@@ -46,7 +46,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
   # overwrites the default username field with the user's email field
   USERNAME_FIELD = 'email' # required by default
-  REQUIRED_FIELD = ['name']
+  REQUIRED_FIELDS = ['name']
 
   def get_full_name(self):
     """Retrieves full name of user"""
