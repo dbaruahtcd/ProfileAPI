@@ -5,6 +5,8 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication # assigns a token to the user when they log in and all subsequent requests
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import models
 from profiles_api import serializers
@@ -114,3 +116,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
   #filter user's based on certain values
   filter_backends = (filters.SearchFilter,)
   search_fields = ('name', 'email',)
+
+class UserLoginApiView(ObtainAuthToken):
+  """Handle creating user authtication tokens"""
+  # needs to be added so that it's visible in the Django admin view
+  renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
