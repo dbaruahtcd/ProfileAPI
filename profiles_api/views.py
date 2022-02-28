@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication # assigns a token to the user when they log in and all subsequent requests
+from rest_framework import filters
 
 from profiles_api import models
 from profiles_api import serializers
@@ -110,3 +111,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
   authentication_classes = (TokenAuthentication,) #create it as a tuple
   #permission to do certain things
   permission_classes = (permissions.UpdateOwnProfile,)
+  #filter user's based on certain values
+  filter_backends = (filters.SearchFilter,)
+  search_fields = ('name', 'email',)
