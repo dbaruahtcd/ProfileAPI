@@ -3,8 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication # assigns a token to the user when they log in and all subsequent requests
 
+from profiles_api import models
 from profiles_api import serializers
+from profiles_api import permissions
 
 # Create your views here.
 
@@ -98,3 +101,12 @@ class HelloViewSet(viewsets.ViewSet):
   def destroy(self, request, pk=None):
     """Handle removing an object"""
     return Response({'http_method': 'DELETE'})
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+  """Handle creating and updating profiles. Rest framework knows the standard function that you would want to perform on a viewset"""
+  serializer_class = serializers.UserProfileSerializer
+  queryset = models.UserProfile.objects.all()
+  #how the user will authenticate
+  authentication_classes = (TokenAuthentication,) #create it as a tuple
+  #permission to do certain things
+  permission_classes = (permissions.UpdateOwnProfile,)
