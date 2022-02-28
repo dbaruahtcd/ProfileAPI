@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings #retrieve settings from settings.py file
 
 # standard base class for overriding the default Django User model
 from django.contrib.auth.models import AbstractBaseUser
@@ -59,5 +60,20 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
   def __str__(self):
     """Returns string representation of our user"""
     return self.email
+
+class ProfileFeedItem(models.Model):
+  """Profile status update"""
+  user_profile = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE
+  )
+
+  status_text = models.CharField(max_length=255)
+  created_on = models.DateTimeField(auto_now_add=True)
+
+  def _str(self):
+    """Returns model as a string"""
+    return self.status_text
+
 
 
